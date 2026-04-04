@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +20,11 @@ public class User implements UserDetails {
     private String username;
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String firstName;
     private String lastName;
-    private int age;
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -35,12 +37,11 @@ public class User implements UserDetails {
 
     public User() {}
 
-    public User(String username, String password, String firstName, String lastName, int age, String email, Set<Role> roles) {
+    public User(String username, String password, String firstName, String lastName, String email, Set<Role> roles) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
         this.email = email;
         this.roles = roles;
     }
@@ -51,15 +52,19 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() { return true; }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() { return true; }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() { return true; }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() { return true; }
 
     public Long getId() { return id; }
@@ -76,9 +81,6 @@ public class User implements UserDetails {
 
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
-
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
