@@ -25,14 +25,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
-        users.forEach(u -> Hibernate.initialize(u.getRoles()));  // FIXED: LAZY initialization
+        users.forEach(u -> Hibernate.initialize(u.getRoles()));
         return users;
     }
 
     @Override
     public User getUserById(Long id) {
         User user = userRepository.findById(id).orElse(null);
-        if (user != null) Hibernate.initialize(user.getRoles());  // FIXED: LAZY initialization
+        if (user != null) Hibernate.initialize(user.getRoles());
         return user;
     }
 
